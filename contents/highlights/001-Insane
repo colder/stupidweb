@@ -1,0 +1,5 @@
+Insane
+
+I'm currently working on a scala compiler plugin that performs interprocedural, compositional effect and pointer analysis on arbitrary scala programs!
+
+Feel free to check out Insane either on [1] or [2]

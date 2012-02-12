@@ -1,0 +1,107 @@
+* {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background: #3E2A1F;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+div#top {
+    background: url('/images/old_chap.gif') 2px 5px no-repeat;
+}
+
+h1 {
+    color: #F1C190;
+    font-size: 1.5em;
+    padding: 20px 0px 5px 35px;
+}
+
+div#top ul#menu {
+    list-style: none;
+    border-top: 5px solid #7F685A;
+    border-bottom: 1px solid #AC9A8F;
+    background: #CDC2B4;
+    padding: 5px 10px;
+    overflow: hidden;
+}
+
+
+div#top ul#menu li {
+    float: left;
+    margin: 0px 10px;
+}
+
+div#top ul#menu li a {
+    font-size: 0.9em;
+    color: #876F61;
+    text-decoration: none;
+}
+
+div#top ul#menu li a:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+a[target="_blank"] {
+    background: url('/images/icons/bullet_toggle_plus.png') right -2px no-repeat;
+    padding-right: 14px;
+}
+
+div#footer {
+    border-top: 5px solid #7F685A;
+    color: #7F685A;
+    padding: 15px;
+    text-align: right;
+}
+
+div#content {
+    background: white;
+}
+
+div.twocols {
+    overflow: hidden;
+}
+
+div.twocols div.twocols-left {
+    float: left;
+    width: 250px;
+    background: #FFF8EF;
+    border-right: 1px dotted #3E2A1F;
+    margin-right: 5px;
+    padding: 5px 10px;
+}
+div.twocols div.twocols-right {
+    float: left;
+    padding: 5px;
+    max-width: 800px;
+}
+
+h2 {
+    color: #7F685A;
+    margin: 30px 0px 20px 0px;
+    font-size: 1.4em;
+    font-weight: normal;
+}
+
+h3 {
+    color: #AC9A8F;
+    margin: 20px 0px 10px 0px;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+img#profile {
+    margin-top: 20px;
+    border: 1px solid black;
+    width: 100%;
+}
+
+p {
+    margin: 10px 0px;
+}
+a {
+    color: #7F685A;
+}
