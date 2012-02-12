@@ -20,7 +20,6 @@
                 <li><a href="/about/">About</a></li>
                 <li><a href="http://patches.colder.ch" target="_blank">Patches</a></li>
                 <li><a href="http://github.com/colder/" target="_blank">Github</a></li>
-                <li><a href="/settings/">Settings</a></li>
             </ul>
         </div>
         <div id="content">

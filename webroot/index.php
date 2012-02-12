@@ -9,9 +9,14 @@ $_display = isset($_GET['display']) ? $_GET['display'] : 'main';
 
 $_display = rtrim($_display, "/");
 
-switch ($_display) {
+$_page_params = explode("/", $_display);
+
+switch ($_page_params[0]) {
     case "about":
         $_page = "about";
+        break;
+    case "main":
+        $_page = "main";
         break;
     default:
         $_page = "main";
