@@ -1,0 +1,113 @@
+Quick guidelines to code cleanliness
+17.06.2006
+
+### Introduction
+This little guide will cover some of the basic mistakes often seen on IRC. It should enlight people about some basic guidelines required to provide a clean and portable code.
+
+### G1: Quote your array indexes
+
+Beginners often forget to quote their indexes when filling an array. Like any other string, you need to quote them. Even if PHP is kind enough to guess what your mistake was, it won't always result in what you expected.
+
+    <?php
+    $array[key1] = 'foo'; // BAD example
+    $array['key1'] = 'foo'; // Good example
+    ?>
+
+Of course, the first example is perfectly correct if key1 is a defined constant.
+
+
+### G2: Don't quote single variables
+
+I always wanted to know why the beginners use to quote a single variable. Anyway, there is often no point in quoting single variables. You should in fact avoid doing so.
+
+    <?php
+    $name = 'John':
+    echo "$name"; // The quotes are useless
+    ?>
+
+### G3: Always use long open tags
+
+For portability reasons, you should always use long open tags (<?php ... ?>) in your script. Other tags can be removed by setting the configuration directive short_open_tag to 0. So, to have your script as portable as possible, you should take the habit to use <?php and ?> to enclose your PHP code.
+
+### G4: Do not rely on register_globals
+
+register_globals is a magic feature that will inject your script with variables. For example, if the user request your php page using http://yoursite/page.php?age=18 the following code will work if register_globals is enabled:
+
+    <?php
+    echo 'Hi, you must be '.intval($age).' years old';
+    ?>
+
+However, this setting could expose a script to security problems and, for portability reasons again, your script should not rely on it. You should instead use superglobal arrays ($_GET, $_POST, $_REQUEST, $_COOKIE) to access such content:
+
+<?php
+echo 'Hi, you must be '.intval($_GET['age']).' years old';
+?>
+
+### G5: Do not rely on magic_quotes_gpc
+
+The magic_quotes_gpc configuration directive was introduced as a security protection against SQL injection. This setting is thus most likely on. However, your script could be used on a server that doesn't have it enabled, and would thus be exposed to major security problems.
+First, you need to reverse the effects on such settings, here is a nice way doing it:
+
+    <?php
+    function clean (&$item, $key) {
+        $item = stripslashes($item);
+    }
+    if (get_magic_quotes_gpc()) {
+        array_walk_recursive($_GET,     'clean');
+        array_walk_recursive($_POST,    'clean');
+        array_walk_recursive($_REQUEST, 'clean');
+        array_walk_recursive($_COOKIE,  'clean');
+    }
+    ?>
+
+Note that this code won't affect magic_quotes_gpc's effect on keys as it's often not a problem.
+You should then use a proper way of escaping/filtering on _ALL_ your tainted data used in a SQL query. Here is some propositions:
+Use the function intval() on variables that are meant to be integers (id, age, year, ...)
+Use the correct escaping function on text values, for example mysql_real_escape_string() MySQL based queries.
+This should save you of lot of troubles.
+
+### G6: Enable error reporting
+
+One of the most important thing is to completely enable error_reporting in the development environment by setting error_reporting to E_ALL (including E_STRICT would be even better).
+You will then be able to detect your mistakes, like an unquoted array index, an undefined variable, etc... so you can fix them and not just hide them!
+
+### G7: Indent your code properly
+
+Code readability is quite important, especially if you need to track a bug. The first step to have a readable code is to indent your code properly. A standard is to use 4 spaces instead of a tabulation.
+
+    <?php
+    // Unreadable code
+    if ($var == true) {
+    if ($var2 == false) {
+    switch($var3) {
+            case 3:
+    echo 3;
+        break;
+    default:
+        echo 5;
+    }
+    echo 'foo';
+        }
+        echo 'bar';
+            }
+    ?>
+
+The readability of this code can be amazingly improved by indenting your code correctly. You'll also decrease the odds to come across a parse error caused by a bracket mismatch:
+
+    <?php
+    // This is much better
+    if ($var == true) {
+        if ($var2 == false) {
+            switch($var3) {
+                case 3:
+                    echo 3;
+                    break;
+                default:
+                    echo 5;
+            }
+            echo 'foo';
+        }
+        echo 'bar';
+    }
+    ?>
+

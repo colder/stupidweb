@@ -59,29 +59,41 @@ div#footer {
 
 div#content {
     background: white;
+    min-width: 900px;
 }
 
 div.twocols {
     overflow: hidden;
+    background: #FFF8EF;
 }
 
 div.twocols div.twocols-left {
     float: left;
-    width: 250px;
+    width: 315px;
     background: #FFF8EF;
-    border-right: 1px dotted #3E2A1F;
-    margin-right: 5px;
-    padding: 5px 10px;
 }
+
+div.twocols div.twocols-left div.content {
+    padding: 0px 10px;
+}
+
+
 div.twocols div.twocols-right {
-    float: left;
-    padding: 5px;
-    max-width: 800px;
+    overflow: hidden;
+    width: auto;
+    min-height: 100%;
+    border-left: 1px dotted #3E2A1F;
+    background: white;
+    min-height: 600px;
+}
+
+div.twocols div.twocols-right div.content {
+    padding: 0px 20px 10px 10px;
 }
 
 h2 {
     color: #7F685A;
-    margin: 30px 0px 20px 0px;
+    margin: 20px 0px 15px 0px;
     font-size: 1.4em;
     font-weight: normal;
 }
@@ -101,7 +113,29 @@ img#profile {
 
 p {
     margin: 10px 0px;
+    max-width: 700px;
+    text-align: justify;
 }
 a {
     color: #7F685A;
 }
+
+.news-item div.title h2 {
+    margin-bottom: 0px;
+}
+
+.news-item div.title .date {
+    color: #666;
+    font-size: smaller;
+    margin-bottom: 10px;
+}
+
+pre {
+    margin: 10px 5px 10px 10px;
+    border-left: 2px dotted #7F685A;
+    background: #FFF8EF;
+    padding: 5px;
+    max-width: 700px;
+}
+
+

@@ -1,5 +1,6 @@
 <div class="twocols">
     <div class="twocols-left">
+      <div class="content">
        <img id="profile" src="/images/profile.jpg" />
 
        <h2>Contact</h2>
@@ -13,10 +14,11 @@
 
        <h3>Twitter</h3>
        <p><a href="http://twitter.com/ekneuss" target="_blank">@ekneuss</a></p>
-
+      </div>
     </div>
 
     <div class="twocols-right">
+      <div class="content">
         <h2>Biography</h2>
         <?php
             echo Markdown(file_get_contents(__ROOT__.'/contents/about/biography'));
@@ -26,5 +28,8 @@
         <?php
             echo Markdown(file_get_contents(__ROOT__.'/contents/about/publications'));
         ?>
+
+        <h2>Recent activity</h2>
+      </div>
     </div>
 </div>
