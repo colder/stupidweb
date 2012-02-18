@@ -2,13 +2,21 @@
     border: 0px;
     margin: 0px;
     padding: 0px;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 body {
     background: #3E2A1F;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
+ul {
+    list-style: square;
+}
+
+ul li {
+    margin-left: 25px;
+}
+
 
 div#top {
     background: url('/images/old_chap.gif') 2px 5px no-repeat;
@@ -117,8 +125,12 @@ p {
     max-width: 700px;
     text-align: justify;
 }
+
 a {
     color: #7F685A;
+}
+
+em {
 }
 
 .news-item div.title h2 {
@@ -190,12 +202,4 @@ div.error404 {
 div.publications {
     max-width: 700px;
     text-align: justify;
-}
-
-div.publications ul {
-    list-style: square;
-}
-
-div.publications ul li {
-    margin-left: 25px;
 }
