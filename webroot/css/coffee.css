@@ -122,7 +122,7 @@ a {
 }
 
 .news-item div.title h2 {
-    margin-top: 80px;
+    margin-top: 20px;
     margin-bottom: 0px;
 }
 
@@ -139,8 +139,11 @@ a {
     max-width: 700px;
 }
 
-.news-item:first-child div.title h2 {
-    margin-top: 20px;
+.news-separator {
+    max-width: 460px;
+    margin: 55px 120px;
+    height: 2px;
+    background: #CDC2B4;
 }
 
 .news-item div.title .date {

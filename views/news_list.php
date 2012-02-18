@@ -5,6 +5,8 @@ $_perpage = 5;
 
 $selected_news = array_slice($news, $_page*$_perpage, $_perpage);
 
+$first = true;
+
 foreach ($selected_news as $file) {
     list($id, $simpleTitle) = explode('-', basename($file));
     $_lines = file($file);
@@ -14,6 +16,10 @@ foreach ($selected_news as $file) {
     $id    = (int)$id;
     $text  = trim(implode("", array_slice($_lines, 2)));
 
+    if (!$first) {
+        echo '<div class="news-separator"></div>';
+    }
+    $first = false;
     echo '
 <div class="news-item">
     <div class="title">
