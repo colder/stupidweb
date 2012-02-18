@@ -1,0 +1,94 @@
+Another example showing that register_globals is evil !
+26.07.2005
+
++++ Table of Content
+# [#intro Introduction]
+# [#theory Theorical considerations]
+# [#leak The leak]
+# [#conclusion Conclusion]
+
++++ Introduction[[# intro]]
+When on, {{register_globals}} will inject your scripts with all sorts of variables, like variables coming from GET or POST methods, from sessions and cookies. This setting can make scripts insecure, using the fact that php doesn't require initialization of variables. There is an example here http://www.php.net/register_globals of that kind of leak. This tiny text will explain another way to get rid of a login security using leaks created by {{register_global = ON}} too, but from another point of view.
+
++++ Theorical considerations[[# theory]]
+There are many arrays that are initialized in a bad way, without "array();" and just by assigning an index like this :
+<code type="php">
+$sample['key1'] = 'value1';
+$sample['key2'] = 'value2';
+</code>
+
+You probably already know that you can access to one char of a string using { } or [ ]
+
+For more informations: [http://www.php.net/manual/language.types.string.php#language.types.string.substr PHP manual page about strings]
+
+Since php4, using [ ] instead of { } to access any char is deprecated, but still available for compatibility reasons.
+
+So:
+
+<code type="php">
+$string = "abcdefgh";
+
+echo $string{2}; // 'c'
+echo $string{4}; // 'e'
+echo $string{0};
+</code>
+
+Behaves the same as :
+<code type="php">
+$string = "abcdefgh";
+
+echo $string[2]; // 'c'
+echo $string[4]; // 'e'
+echo $string[0];
+</code>
+
+
+Now what happens if you use non-numerical index?
+PHP evaluate the index as 0:
+
+<code type="php">
+$string = "abcdefgh";
+
+echo $string['foo']; // 'a'
+echo $string[0]; // 'a'
+</code>
+
+You must also notice that if you modify a char with more than one char: only the first char will be used.
+<code type="php">
+$string = 'abcdefgh';
+
+$string[0] = 'yzzzzz'; // 'ybcdefgh'
+$string[0] = 'y'; // 'ybcdefgh'
+</code>
+
++++ The leak[[# leak]]
+
+Imagine that there is a script that use :
+<code type="php">
+$admin['user'] = 'foo';
+$admin['pass'] = 'bar';
+
+if($admin['user'] == $_GET['username'] AND $admin['pass'] == $_GET['password']){
+/* Give r00t */
+}
+</code>
+
+It could seem quite secure, but in fact, it isn't. The security leak is caused by the bad array initialization mixed with register_gobals.
+
+++++ Here is an example
+
+What happens if you try to request the page with : page.php?admin=asdf
+
+# ##0000BB|$admin## is set to ##DD0000|'asdf'##
+# ##0000BB|$admin####007700|[####DD0000|'user'####007700|] =## ##DD0000|'foo'##; sets the first char of ##DD0000|'asdf'## to ##DD0000|'f'##
+# ##0000BB|$admin####007700|[####DD0000|'pass'####007700|] =## ##DD0000|'bar'##; sets the first char of ##DD0000|'fsdf'## to ##DD0000|'b'##
+# ##0000BB|$admin####007700|[####DD0000|'user'####007700|] ==## ##0000BB|$_GET####007700|[####DD0000|'username'####007700|]## tests if ##DD0000|'b'## ##007700|==## ##0000BB|$_GET####007700|[####DD0000|'username'####007700|]##
+# ##0000BB|$admin####007700|[####DD0000|'pass'####007700|] ==## ##0000BB|$_GET####007700|[####DD0000|'password'####007700|]## tests if ##DD0000|'b'## ##007700|==## ##0000BB|$_GET####007700|[####DD0000|'password'####007700|]##
+
+So, to have access : simply use : page.php?admin=asdf&username=b&password=b
+
+It means you only have to know the first character of the pass, and if you don't : try, there are not many possibilities.
++++ Conclusion[[# conclusion]]
+As you can see, the security leaks caused by register_globals are not always obvious.
+A good habbit to take is to disable the {{register_globals}} feature, especially if you don't use it.
+Its also important to be sure the variables you're working with are defined the proper way.

@@ -1,0 +1,75 @@
+Truth about the Last mod_rewrite's modifier (revisited)
+27.01.2007
+
++++ Table of Content
+# [#intro Introduction]
+# [#truth Truth about the Last modifier]
+# [#how How mod_rewrite works]
+# [#pitfalls Pitfalls]
+# [#dontuse Where L shouldn't be used]
+# [#conclusions Conclusions]
++++ Introduction[[# intro]]
+From what I have seen in many tutorials or in IRC discussions, I must say that the usage of the [L] (or Last)  modifier has become some sort of a standard, a flag that everyone should put there "just in case", as it can't be harmful. This often demonstrates bad understanding on how apache's {{mod_rewrite}} internally works. I'll try to explain why [L] should be used wisely, and especially in which cases you shouldn't use it at all.
+
++++ Truth about the Last modifier [[# truth]]
+Let's focus on {{rewriteRules}} in a per-directory context (a {{.htaccess}} file for example), which sadly represents the majority of {{mod_rewrite}}'s uses. In this context, the [L] flag won't force the rewrite to stop, it will only triggers the internal sub-request at this point. But the sub-request may get through a set of {{rewriteRules}} defined in a per-directory context again, meaning that the rewrite of the current URL may not be finished.
+
+Let's consider a simple example:
+
+<code type="plain">
+# /path/to/webroot/.htaccess
+RewriteEngine on
+rewriteRule a b [L]
+rewriteRule b c
+</code>
+
+Most people would think that when requesting {{/a}}, the internally requested file would be {{/b}} because of the [L] flag. Well, it's not. The last requested file will actually be {{/c}}. To understand why, you need to understand how {{mod_rewrite}} handles a request in a per-directory context.
++++ How {{mod_rewrite}} works[[# how]]
+First, there is an important difference between a set of {{rewriteRules}} in a per-directory context and one placed in a more general context like in the {{httpd.conf}} file. The way {{mod_rewrite}} will work is determined by the context in which the {{rewriteRules}} are defined. Because {{mod_rewrite}} was ment to rewrite URLs to files, it won't be able to directly handle requests in a .htaccess file, where the requests will have already been translated to files. For that reason, {{mod_rewrite}} will try to translate them back to URLs and use them in an internal sub request, which will restart the API phases. Read [http://httpd.apache.org/docs/2.2/rewrite/rewrite_tech.html#InternalAPI API Phases] for more details on that subject.
+
+It means that when an url is rewritten in a per-directory context, it will trigger a sub-request, wich may be rewritten again, and again.
+
+Applying that to the example, we get:
+<code type="plain">
+1st sub-request - Trying to apply the pattern "a" to "a": match -> rewrite to "b".
+1st sub-request - L flag used: trigger internal sub-request with the rewritten url.
+2nd sub-request - Trying to apply the pattern "a" to "b": no match.
+2nd sub-request - Trying to apply the pattern "b" to "b": match -> rewrite to "c".
+2nd sub-request - Reaching the end, url was rewritten, trigger internal sub-request with the rewritten url..
+3rd sub-request - Trying to apply the pattern "a" to "c": no match.
+3rd sub-request - Trying to apply the pattern "b" to "c": no match.
+3rd sub-request - Reaching the end, url was not rewritten: serve the file.
+</code>
+
++++ Pitfalls [[# pitfalls]]
+
+A common pitfall is a {{rewriteRule}} that ends in an infinite loop. For example:
+<code type="plain">
+# /path/to/webroot/.htaccess
+RewriteEngine on
+rewriteRule ^(.*)$ page_$1.php
+</code>
+
+Let's say we request {{bar}}, it will get rewritten to {{page_bar.php}} which will get rewritten to {{page_page_bar.php.php}} and so on. Adding a [L] flag here won't help at all.
+There are multiple solutions here. One would be to write your {{rewriteRules}} in a more general context. Another solution would be to ensure that {{mod_rewrite}} won't get in an infinite loop. You could either use a {{rewriteCond}} or simply modify the pattern so it can't match the rewritten url.
+
++++ Where [L] shouldn't be used [[# dontuse]]
+
+As a general rule, don't use [L] flag when you're defining only one {{rewriteRule}}, it's useless. Additionally, don't use [L] when another {{rewriteRule}} in the file is able to match the rewritten url. Doing so will only give more work to the rewrite engine. To demonstrate that, let's consider the first example without any [L] flag:
+
+<code type="plain">
+1st sub-request - Trying to apply the pattern "a" to "a": match -> rewrite to "b".
+1st sub-request - Trying to apply the pattern "b" to "b": match -> rewrite to "c".
+1st sub-request - Reaching the end, url was rewritten, trigger internal sub-request with the rewritten url.
+2nd sub-request - Trying to apply the pattern "a" to "c": no match.
+2nd sub-request - Trying to apply the pattern "b" to "c": no match.
+2nd sub-request - Reaching the end, url was not rewritten: serve the file.
+</code>
+
+It would require only two sub-requests for the same result. In that case, the [L] flag is better left out.
+
+
++++ Conclusions [[# conclusions]]
+
+I hope this little explanantion will help people in understanding how the [L] (Last) flag and more generally {{mod_rewrite}} works in a per-directory context. Additionnaly you should never define a set of {{rewriteRules}} in a per-directory context, as it will be slower and you may run into the kind of troubles explained above.
+

@@ -10,12 +10,17 @@ if (!empty($news)) {
     $text  = trim(implode("", array_slice($_lines, 2)));
 
     echo '
-<div class="news-item">
-    <div class="title">
-        <h2>'.$title.'</h2>
-        <div class="date">'.date('D, j F Y', strtotime($date)).'</div>
+<div class="header-box-right">
+    <a href="/news/">Back to list</a>
+</div>
+<div>
+    <div class="news-item">
+        <div class="title">
+            <h2>'.$title.'</h2>
+            <div class="date">'.date('D, j F Y', strtotime($date)).'</div>
+        </div>
+        <div class="text">'.Markdown($text).'</div>
     </div>
-    <div class="text">'.Markdown($text).'</div>
 </div>';
 
 } else {

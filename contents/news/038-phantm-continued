@@ -1,0 +1,40 @@
+PHANTM Continued
+18.08.2010
+
+Seven months ago, I mentioned _PHANTM_, a tool that statically analyzes PHP code in order to detect and report type mismatch. I've actively continued working on it since then, mainly as a research project for _EPFL_ but also as a fun way to occupy my free time.
+
+### Why check types? This is PHP after all!
+As you may have read recently on the internals mailing list, types are basically being accused of treason against the spirit of PHP. Gosh!
+Some of the original minds behind PHP argued that strictly checking for types wouldn't have its place in the PHP-boat, or even that it would sink it. 
+
+### PHANTM, statically checking your types since 2010
+So, what's the point of checking types? Contrary to what people might want to believe, PHP is used to do more than manipulating strings out of files, databases, and forms. In a real application, it is in fact rare to see a case where an implicit type conversion is actually wanted (concatenation or string interpolation aside). Even though PHP will handle them gracefully in most cases, it is usually an indication of either bad input handling, or simply laziness. It is arguable that a code without implicit type conversions will be better understood, leaving less room for unexpected behaviors and/or bugs.
+
+That put aside, how can _PHANTM_ help you to write better code? _PHANTM_ will statically check that you manipulate values correctly in your PHP code. Statically means that it will do so without actually running any of your code, but simply by looking at the source code. This has the advantage of checking all code paths without you having to write a test for each, but it comes with the cost that it will only be able to deal with an abstract representation of each program point: yes, you will have false positives, reports about perfectly valid and safe operations.
+
+### Features
+Here is a non-exhaustive list of what _PHANTM_ supports:
+
+  * PHP 5.3 grammar
+  * Most extensions, functions, and classes shipped with PHP, as well as selected PECL extensions
+  * Flow-sensitive type analysis
+  * Inter-procedural analysis through selective inlining
+  * Pure statements check
+  * Runtime instrumentation
+  * phpDoc annotations usage/check
+  * Includes resolution
+  * ST/AST/CFG generation in dot format
+  * Function call graph generation
+  * External annotations
+  * API generation
+  * ...
+
+### Check it out
+
+The official website of _PHANTM_ is [http://lara.epfl.ch/dokuwiki/phantm](http://lara.epfl.ch/dokuwiki/phantm), where you can download releases, read documentation, and find more details on the features _PHANTM_ provides. You can also find it in github at [http://github.com/colder/phantm](http://github.com/colder/phantm).
+
+Interested in seeing some of its features in action? Check out the online demo here: [http://project.colder.ch/demo/](http://project.colder.ch/demo/)
+
+Comments? Contributions? Problems? I'd be happy to hear about them!
+
+

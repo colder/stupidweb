@@ -1,0 +1,15 @@
+New datastructures in SPL
+16.01.2008
+
+New datastructures made their way into SPL recently:
+
+* _SplDoublyLinkedList_
+
+as long with two childs:
+
+* _SplStack_
+* _SplQueue_
+
+Those structures implement _Iterator_, _ArrayAccess_ and _Countable_ which makes them easy to handle. There are also multiple ways to iterate through them.
+
+More datastructures will get implemented in the future. The goal is to implement quite every basic datastructure along with algorithms related to them. _SPL_ could then be used as an object oriented  replacement for _ADT_.

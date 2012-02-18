@@ -1,0 +1,12 @@
+New website available
+10.05.2005
+
+Here we go ! I'm happy to present you my new website. You probably feel a bit disappointed and I can understand that: the new design is completely different. I'll probably take the time to create a skin looking like the old website.
+
+This new website is still under construction but the main work is done.  I've made this new design thinking about two problem that occurred in the last one : shortage of place and the excessive weight of the images. As you can see, this design uses few images and its width is not fixed.
+
+About the main system used behind: I changed the way I linked the pages, I used output buffering to have more control on the output but also to have control on the meta information that became dynamic. I also use a skin system using templates and CSS. Notice that I plan a "My settings" section where you'll be able to configure your own view of this website.
+
+A repository system is also implemented to handle my php scripts, publications, school files and images. I'll fill it when I find the time.
+
+I hope you'll enjoy.

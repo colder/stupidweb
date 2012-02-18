@@ -1,0 +1,96 @@
+Some explanations for novices
+27.07.2005
+
++++ Table of Content
+# [#errors Catching mysql errors]
+# [#fetching Fetching rows from a resource]
+
++++ Catching mysql errors[[# errors]]
+
+When you work with mysql_* functions, they may return any kind of errors. Those errors won't be printed directly. To display them, you'll have to use the mysql_error() function.
+
+The most common example of its use is :
+<code type="php">
+// ...
+
+    $resource = mysql_query('SELECT ....') OR die(mysql_error());
+
+// ...
+</code>
+
+++++ Explanation
+
+This is a boolean expression which can be written
+
+<code type="php">
+    ($resource = mysql_query('SELECT ....')) OR (die(mysql_error()));
+</code>
+
+You've to know that an assignation will return the value assigned, so in this case ($resource = mysql_query('SELECT ....')) will return the value returned by mysql_query('SELECT ....').
+
+After a quick look into the [http://php.net/mysql_query manual page about mysql_query()], you can see that there are only three things mysql_query can return:
+# when everything works: a {{resource}} or {{true}}
+# when an error occurs: {{false}}
+
+Notice that a ressource even "empty" is evaluated as {{true}} in a boolean expression.
+
+We will focus on the case when mysql_query() returns false (error occured) because we want to catch the errors.
+
+An important thing to know is that in boolean expressions, the part after an "OR" won't be executed if the first part is evaluated as true.
+
+<code type="php">
+false OR print 'hello world'; // 'hello world' is outputted
+
+true OR print 'hello world'; // won't output anything
+</code>
+
+Now, you can see that the die(mysql_error()) printing the error will be executed only if the first part, the value returned by mysql_query(...), is evaluated as false which means an error occured.
+
+That was an explanation for the short syntax, but notice that this syntax produces the same result and could be easier to understand:
+<code type="php">
+// ...
+    $resource = mysql_query('SELECT ...');
+    if ($resource === false) {
+        die(mysql_error());
+    }
+</code>
+
+ps: the "OR" boolean operator should be replaced by "||" and the "AND" by "&&" for a matter of precedence. I used the textual version to make it more clear. 
+
++++ while ($row = mysql_fetch_...)[[# fetching]]
+
+Firstable, a {{resource}} is **NOT** an {{array}}, so using functions like foreach() or count() on it is simply useless.
+
+A {{resource}} is something that contains the selected data. The only way to look into it is using the mysql_* functions.
+
+The most common example of fetching multiple rows from a resource is :
+<code type="php">
+// ...
+    $resource = mysql_query('SELECT...') or die(mysql_error());
+    
+    while ($row = mysql_fetch_assoc($resource)) {
+        // ...
+    }
+// ...
+</code>
+
+This code is often used but not always understood by novices.
+
+++++ Explanation
+
+You've to know that a ressource contains a data pointer. You can make the analogy:
+* ressource -> file with multiple lines (rows)
+* data pointer -> number of the line to read
+
+This pointer will be moved by the mysql_fetch_* functions after getting the row.
+
+<code type="php">
+$row1 = mysql_fetch_assoc($resource); // returns one row
+$row2 = mysql_fetch_assoc($resource); // returns the next row
+</code>
+
+At the end of the ressource, when there is no more row after the pointer, the mysql_fetch_* functions will return false. 
+
+We have seen that an assignation returns the value assigned, and its known that the while loop will be stopped when the condition is evaluated false, so the while loop will stop at the end of the resource.
+
+

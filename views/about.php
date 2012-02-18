@@ -24,10 +24,12 @@
             echo Markdown(file_get_contents(__ROOT__.'/contents/about/biography'));
         ?>
 
-        <h2>Publications</h2>
+        <div class="publications">
+            <h2>Publications</h2>
         <?php
             echo Markdown(file_get_contents(__ROOT__.'/contents/about/publications'));
         ?>
+        </div>
 
         <h2>Recent activity</h2>
       </div>

@@ -1,0 +1,13 @@
+Dataflow Type Analysis for PHP
+13.01.2010
+
+I've spent some time lately working on a project involving data-flow analysis for PHP.
+
+This analyzer will basically model your code as control flow graphs, in which it will assign types and let them flow through control structures. When reaching stability, it will check that the operations done of the values are sound type-wise. It will also do some structural checks.
+
+You can find a presentation I gave recently about it: [presentation12.01.10.pdf](http://github.com/colder/phantm/raw/master/presentation/presentation12.01.10.pdf)
+This project is in an early stage, a prototype, but still gives some results!
+
+You will find the github project page here: [http://github.com/colder/phantm](http://github.com/colder/phantm)
+
+ps: I just missed the 1 year "no-news anniversary", damn!

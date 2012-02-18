@@ -2,6 +2,7 @@
     border: 0px;
     margin: 0px;
     padding: 0px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -53,7 +54,7 @@ a[target="_blank"] {
 div#footer {
     border-top: 5px solid #7F685A;
     color: #7F685A;
-    padding: 15px;
+    padding: 5px 15px;
     text-align: right;
 }
 
@@ -125,8 +126,17 @@ a {
     margin-bottom: 0px;
 }
 
+.news-item div.title h2 a {
+    text-decoration: none;
+}
+
+.news-item div.title h2 a:hover {
+    text-decoration: underline;
+}
+
 .news-item ul li {
     margin-left: 30px;
+    max-width: 700px;
 }
 
 .news-item:first-child div.title h2 {
@@ -139,14 +149,50 @@ a {
     margin-bottom: 10px;
 }
 
+.header-box-right {
+    max-width: 700px;
+}
+.header-box-right a {
+    margin-top: -20px;
+    margin-right: 10px;
+    float: right;
+    padding: 3px 5px;
+    background: #FFF8EF;
+
+    border-left:   1px solid #AC9A8F;
+    border-bottom: 1px solid #AC9A8F;
+    border-right:  1px solid #AC9A8F;
+
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+
+    -moz-border-bottom-left-radius: 10px;
+    -moz-border-bottom-right-radius: 10px;
+
+}
+
 pre {
-    margin: 10px 5px 10px 10px;
+    margin: 20px 5px 20px 10px;
     border-left: 2px dotted #7F685A;
     background: #FFF8EF;
-    padding: 5px;
+    padding: 5px 10px;
     max-width: 700px;
+    font-size: 1em;
 }
 
 div.error404 {
     padding: 10px;
-}   
+}
+
+div.publications {
+    max-width: 700px;
+    text-align: justify;
+}
+
+div.publications ul {
+    list-style: square;
+}
+
+div.publications ul li {
+    margin-left: 25px;
+}

@@ -1,0 +1,63 @@
+Demonstration of PHP's magic_quotes imcompetence against XSS
+31.08.2005
+
++++ Table of Content
+
+# [#introduction Introduction]
+# [#idea Idea]
+# [#conclusion Conclusion]
+
++++ Introduction[[# introduction]]
+
+When building a website, security is an important point which is, sadly, often forgotten. In this article, I'll talk about one security hole called XSS **with** magic_quotes_gpc. It consists, in website context, of injecting arbitrary html code into a trusted website. The attack is normally targeted towards the client-side. The exploit is used to steal client-side informations like cookies. PHP has tryed to protect novices users against this kind of injection holes by introducing a "magic" feature : magic_quotes_gpc. This feature will automatically escape single and double quotes in untrusted inherited data: GET, POST and COOKIE variables. Escaping quotes is a way to prevent injections, because the attaker can't leave a quoted string:
+<code type="php">
+ // get untrusted data (magic_quotes_gpc is on)
+
+ $variable = $_GET['variable'];
+
+ // use it in an output
+
+ echo '<img src="', $variable, '" />';
+
+ // if the quotes contained in $variable are escaped, it
+ //   makes it impossible to leave the src=".." . The
+ //   result would look like:
+ // <img src="foo\"bar" />
+</code>
+
+But, magic_quotes_gpc is not enough, there is still a way to steal passwords is many situations using a trick I've though about.
+
++++ Idea[[# idea]]
+
+Let's take an example : an image gallery community.
+
+* The script that displays each images get the image url by GET variables.
+* No checks are made to test the validity of the url.
+* magic_quotes_gpc is on.
+
+The code would be similar to the first example: 
+<code type="php">
+ // get untrusted data (magic_quotes_gpc is on)
+ $image_url = $_GET['image_url'];
+
+ // display the image
+ echo 'The image you requested : <br />';
+ echo '<img src="', $image_url, '" alt="some nice image" width="400" height="400" />';
+
+</code>
+
+In this case, there is no way to inject an efficient javascript that could request and send the cookie, so we will use a trick.
+
+Let's use the url of a php image requesting http authentication : it will pop up an authentication box requesting a re-login for example. The basic inexperienced user would fill it with his community login and try it. The PHP image will recieve the information and just have to store it.
+
+
+= [[image shema_xss_image.jpg]]
+
+
+Note that this kind of trick will work on every injections that will modify client requests to get the complete page: images, frames, css file, ...
+
++++ Conclusion [[# conclusion]]
+
+As you can see, magic_quotes_gpc does not protect your website against malicious injections that can lead to login theft. There is no "magic" solution when talking security and PHP provides a lot of functions that make your tests easier so use them! 
+
+-- colder

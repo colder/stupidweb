@@ -10,6 +10,7 @@
         <meta name="keywords" content="colder, Etienne Kneuss, ekneuss, php, highlight, news, php" />
         <meta name="author" content="Etienne Kneuss" />
         <link rel="stylesheet" type="text/css" href="/css/coffee.css" />
+        <link rel="stylesheet" type="text/css" href="/css/highlight/vs.css" />
     </head>
     <body>
         <!-- TOP -->

@@ -1,0 +1,155 @@
+Late Static Bindings Explained
+24.08.2007
+
+### Introduction
+Late Static Binding (LSB, yes, not LSD) is an OO feature that is meant to be implemented in PHP 6, and maybe even backported to PHP 5. This article will describe what LSB is, what problems it's supposed to solve and how. 
+
+_Update_: LSB finally got commited in HEAD, this article now describes the way it currently works if you try out a snapshot. The behavior is supposed to remain the same in the future.
+
+### What is Late Static Binding
+Currently, static references to the current class, like _self_ or ___CLASS___ are resolved using the class in which the function belongs, as in where it was defined:
+
+    class A {
+        public static function who() {
+            echo __CLASS__;
+        }
+        public static function test() {
+            self::who();
+        }
+    }
+    class B extends A {
+        public static function who() {
+            echo __CLASS__;
+        }
+    }
+
+    B::test(); // A
+
+LSB tries to solve that problem by introducing a keyword that references the class that was initially called at runtime. Basically, a keyword that would allow you to reference _B_ from _test()_ in the previous example. It was decided not to introduce a new keyword but rather use _static_ that was already reserved.
+
+    class A {
+        public static function who() {
+            echo __CLASS__;
+        }
+        public static function test() {
+            static::who();
+        }
+    }
+    class B extends A {
+        public static function who() {
+            echo __CLASS__;
+        }
+    }
+
+    B::test(); // B
+
+Some people describe _static::_ as the _$this->_ resolution for static calls, this is not true as _$this->_ follows the rules of inheritance while _static::_ doesn't.
+
+### Examples
+
+Most basic example:
+
+    class TestClass {
+
+       protected static function who() {
+            echo __CLASS__."\n";
+       }
+
+       public static function test() {
+           return static::who();
+       }
+    }
+
+    class ChildClass1 extends TestClass {
+
+       protected static function who() {
+            echo __CLASS__."\n";
+       }
+    }
+
+    class ChildClass2 extends TestClass {}
+
+    TestClass::test();   // TestClass
+    ChildClass1::test(); // ChildClass1
+    ChildClass2::test(); // TestClass
+
+It can also be used in a non-static context:
+
+    class TestChild extends TestParent {
+        public function __construct() {
+            static::who();
+        }
+
+        public function test() {
+            $o = new TestParent();
+        }
+
+        public static function who() {
+            echo __CLASS__."\n";
+        }
+    }
+
+    class TestParent {
+        public function __construct() {
+            static::who();
+        }
+
+        public static function who() {
+            echo __CLASS__."\n";
+        }
+    }
+    $o = new TestChild; // TestChild
+    $o->test();         // TestParent
+
+Fully resolved static calls with no fall backs will break the resolution of the late static binding.
+
+    class A {
+        public static function foo() {
+            static::who();
+        }
+
+        public static function who() {
+            echo __CLASS__."\n";
+        }
+    }
+
+    class B extends A {
+        public static function test() {
+            A::foo();
+        }
+
+        public static function who() {
+            echo __CLASS__."\n";
+        }
+    }
+
+    B::test(); // A
+
+### Edge Cases
+
+Because of the way scopes are traversed, and that no breaks are enforced for internal hooks, it means that _static::_ would work the same way even with a fallback that occurs on them, i.e. _\_\_get()_, _\_\_set()_, ...
+
+
+    class A {
+
+       protected static function who() {
+            echo __CLASS__."\n";
+       }
+
+       public function __get($var) {
+           return static::who();
+       }
+    }
+
+    class B extends A {
+
+       protected static function who() {
+            echo __CLASS__."\n";
+       }
+    }
+
+    $b = new B;
+    $b->foo; // B
+
+
+The same principle applies to handlers, as long as they are defined and called within valid scopes.

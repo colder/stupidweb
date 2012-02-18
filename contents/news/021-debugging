@@ -1,0 +1,158 @@
+Introduction to debugging for beginners
+18.11.2006
+
++++ Table of Content
+# [#intro Introduction]
+# [#g1 G1: Expose errors]
+# [#g2 G2: Read the error message]
+# [#e1 E1: Syntax error, unexpected "..."]
+# [#e2 E2: mysql_*(): supplied argument is not a valid MySQL result resource]
+# [#e3 E3: Script malfunction]
+# [#conclusion Conclusions]
++++ Introduction[[# intro]]
+This little guide can be used as a checklist to correctly debug your PHP userland errors. It covers the main principles and methods to:
+# Detect your errors
+# Find the reason in the code
+
++++ G1: Expose errors [[# g1]]
+Before even thinking about debugging, you need to know that an error occured. To tell PHP to report errors accordingly, there is three important ini settings:
+# error_reporting : defines the types of error that PHP will report(or ignore). You should set this one to E_ALL atleast. Using E_ALL | E_STRICT is even prefered. However, it might report errors you can't do anything about, the most common case is PHP5 scripts that tend to be backward compatible.
+# display_errors : makes PHP display the errors along with the output. You should disable this setting on production environment to reduce disclosure.
+# log_errors : tells whether the errors are logged to the error_log. That's an useful alternative to display_errors on production environments.
+
+As This guide is about debugging your code, the easiest way to catch errors is to set error_reporting to E_ALL | E_STRICT, and display_errors to ON.
+
+There are multiple ways to apply these ini settings:
+
+# At the top of your script, in runtime, using :
+<code type="php">
+ini_set('display_errors', true);
+error_reporting(E_ALL | E_STRICT);
+// Be aware that setting E_STRICT at runtime may hide some errors, because most of E_STRICT errors are issued at compile-time.
+</code>
+# In a .htaccess file, placed in the main directory of your project to debug(Assuming PHP runs as an apache module and that you've enough rights to overwrite such settings)
+php_flag display_errors on
+php_value error_reporting 4095
+# In your php.ini
+
++++ G2: Read the error message [[# g2]]
+
+Each error message contains a lot of information. Sadly, they're not often read completely.
+
+Each error is usually issued using the following format:
+PHP <type> : <message> in <file> line <line>
+
+This guide will cover the main types of errors that occur, and explain a way to track them.
+
++++ E1: Syntax error, unexpected "..." [[# e1]]
+
+Such syntax errors are easy to understand, the grammar of your file is incorrect. Check the line given for errors, if you can't find any, the error may be on the line before.
+For example, you could have forgotten to close the first string:
+
+<code type="php">
+echo "mystring;
+$foo = true;
+$bar = false;
+echo "foobar"; // <-- Unexpected T_STRING at this line, however, the error is caused by the first line.
+</code>
+
+By using a decent editor that supports syntax highlighting, you'll be able to spot such errors easily.
+
+PHP may even tell you what it expected instead, so read the error carefully!
+
+There is also this common syntax error: "Unexpected $end"
+
+This syntax error is pretty explicit, PHP's parser wasn't expecting to hit the end of the file in this context. For such errors, the line reported is pretty useless, as it will point to the end of your file.
+How to find the problem then ? Simple: such errors occur when there is a brace mismatch. So you need to check that every time you open a PHP block using "{", you're closing it correctly.
+<code type="php">
+function hello() {
+    echo 'Hello world';
+    return true;
+
+// ...
+
+ // <-- Unexpected $end at the last line of the file, the problem is that you forgot to close the function.
+</code>
+
+
++++ E2: mysql_*(): supplied argument is not a valid MySQL result resource [[# e2]]
+
+This error is so common it can't be ignored.
+
+The following code is most likely to issue such errors:
+<code type="php">
+$myResource = mysql_query($sqlQuery, $link);
+
+while($row = mysql_fetch_assoc($myResource)) {
+    // ...
+}
+</code>
+
+"Hu? Why? I copied the code from the manual!?". Here is an explanation:
+
+When you're using a SELECT mysql query, for example, mysql_query should return a result resource. However, if the query fails, mysql_query will return false, which is not a resource. mysql_fetch_* won't be able to fetch something from it and will issue the warning.
+
+Here is a code that checks the {{$resource}} before trying to fetch:
+
+<code type="php">
+$myResource = mysql_query($sqlQuery, $link);
+
+if (!$myResource) {
+    // An error occured, you can check mysql_error() for further details about the mysql error
+} else {
+    while($row = mysql_fetch_assoc($myResource)) {
+        // ...
+    }
+}
+
+</code>
+
++++ E3: Script malfunction [[# e3]]
+
+"It doesn't work, but there is no errors, why?". Well, try to find it by yourself first:
+
+PHP offers wonderful tools to check the content of your variables, their type, which is an important part of the debugging process.
+The concept of debugging is to track errors to their source, here is a debugging process example.
+<code type="php">
+$level = 08;
+$start = 01;
+
+// ...
+
+if($level > $start) {
+    echo 'You are not at the start of the game';
+} else {
+    echo 'You are at the beginning of the game';
+}
+</code>
+
+I can already imagine a comment looking like "Ehy, 8 > 1, but it doesn't work, it always says I'm at the beginning of the game!".
+So? Let's start debugging:
+
+
+# What is the conditionnal test, is it accurate ? Yes
+# What is the content of the vars? $level or $start may not be what I believe they are. So I'll check their content, var_dump is really useful for such tasks:
+<code type="php">
+// ...
+var_dump($level, $start);
+if($level > $start) {
+    // ...
+</code>
+# Wow, $level is 0 ? Why is that. Let's check every affectations of that var.
+# There is only one: $level = 08; What's wrong with that?
+# Ah, any int preceeded by 0 is considered as octal. For that reason, 08 makes no sense.
+# Let's change it to $level = 8. Everything works.
+
+Here is an example of a debugging session, the details are not important. What matters is the process:
+
+# Find where the unexpected result is in the code.
+# Go backward and check each conditionnal tests.
+# Check the content of used variables.
+# Unexpected content ? Track down every affectation of the var (take care to check modifications done to references as well)
+
+
+When you've to deal with external content (forms, get arguments, files) it's always a good idea to check their content (var_dump($_GET, $_POST) etc..) before blaming the PHP part.
+
++++ Conclusions [[# conclusion]]
+
+Of course, only the basics are covered by this guide. However, my experience of PHP help channels on IRC shows that most of the begginers don't know the main principles of debugging when encountering an error, so I hope it helps.

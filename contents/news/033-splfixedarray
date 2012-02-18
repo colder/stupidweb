@@ -1,0 +1,26 @@
+SplFixedArray to speed up your PHP arrays
+07.06.2008
+
+Antony got the idea to implement a C-like array wrapper in SPL: SplFixedArray. The main advantage of that class is performance, it's indeed faster than PHP arrays. How so? No free lunch: The speedup comes from the fact that non-numeric indexes are not allowed and that the array is of fixed size (which means no hashing and continuous memory storage). That said, here is a quick example:
+
+    $a = new SplFixedArray(4); // takes the initial size as first argument
+    
+    $a[0] = "foo";
+    $a[2] = "gee";
+    $a[3] = "plop";
+    
+    $a->setSize(3);
+    $a->setSize(5); // increase the size
+    
+    foreach($a as $k=>$v) {
+        var_dump($v);
+    }
+    /* Output:
+     * string(3) "foo"
+     * NULL
+     * string(3) "gee"
+     * NULL
+     * NULL
+     */
+
+The speedup seems to vary between different environments, but so far the multiple benchmarks showed that SplFixedArray was 10~30% faster than standard PHP arrays.

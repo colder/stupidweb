@@ -1,0 +1,38 @@
+SplObjectStorage for a fast and secure object dictionary
+08.01.2009
+
+There have been activity recently about the different ways to uniquely identify objects in PHP. In fact, a function have been sitting in SPL unnoticed for quite some time and while people came across it, some got frustrated. I'm of course talking about spl_object_hash(). To summarize it: in PHP, you basically need two things to safely identify an object: a object index, the handle, and the class handlers which is how the object will react internally. This set of handlers is actually a pointer, and since disclosing valid pointers is not something that should be done, spl_object_hash is simply providing a MD5 hash of those two values concatenated. Now two problems comes from this MD5 hash:
+* It's quite slow
+* It may generate collisions
+
+One of the usages of this hash that comes to mind is an object dictionary(or map): attach information to instances, for example:
+
+    $dict = array();
+    
+    $dict[spl_object_hash($obj1)] = $info1;
+    $dict[spl_object_hash($obj2)] = $info2;
+    // and so on.
+
+Sadly, since PHP arrays are themselves hashtables, that means the hash will get hashed one more time, this is a waste of time.
+
+Another example could be to mark nodes in a graph traversal algorithm, using a set of visited nodes.
+
+
+SPL thankfully provides a class (as of PHP5.3) that can implement quite easily both examples without the problems stated above: SplObjectStorage.
+Since an example is better than thousand words, here is a demonstration:
+
+    // Map
+    $dict = new SplObjectStorage;
+    
+    $dict[$obj1] = $info1;
+    $dict[$obj2] = $info2;
+    
+    var_dump($dict[$obj1]); // $info1
+    
+    // Set
+    $set = new SplObjectStorage;
+    $set->attach($obj1);
+    
+    var_dump($set->contains($obj1)); // True
+
+SplObjectStorage directly uses the unique identifier without pre-hashing it, so you spare time and you will be safe against collisions!

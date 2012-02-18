@@ -1,0 +1,16 @@
+PHPT Generator used to discover documentation problems
+06.12.2006
+
+I commited a patch to docweb, some days back, to allow the generation of the complete package of phpt files. Those phpt files were generated from doc examples.
+
+The main use of those phpt files was to have an easy way to check examples used in the documentation. Along with a [/repository/php/php.net/docweb/analyzeTestResults.php php script analyzing the results] and Hannes' great testing environment, I was able to generate a summary of the examples failing:
+
+The [/repository/php/php.net/docweb/phpt_results.txt?raw results] are quite interresting:
+# 251 tests were generated
+# 126 (50%) passed the checks
+# 23 (9%) tests failed because of a missing extension
+# 102 (41%) tests failed because of an error in the example (11% of them were caused by whitespace issues only)
+
+There is thus potentially 80-90 examples in the documentation that contain errors!
+
+Let the massive example bug squashing party begin !

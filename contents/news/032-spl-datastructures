@@ -1,0 +1,35 @@
+SPL Datastructures updated
+12.05.2008
+
+Here is some news about data structures available in SPL:
+
+ *  There finally is documentation for _SplDoublyLinkedList_, _SplStack_ and _SplQueue_.
+ *  "New" classes: _SplHeap_ (abstract), _SplMaxHeap_, _SplMinHeap_ and _SplPriorityQueue_, documentation of those classes is in progress.
+
+Here is an example of a simple but task scheduler using SplPriorityQueue:
+
+    $q = new SplPriorityQueue;
+
+    $q->insert('a', 1);
+    $q->insert('b', 4);
+    // ...
+    $q->insert('z', 2);
+
+    foreach($q as $task) {
+        // .. process task ..
+        echo $task."\n";
+
+        // ... add new tasks ..
+        if ($task == 'b') {
+            $q->insert('c', 3);
+        }
+    }
+
+    /* Output:
+     * b
+     * c
+     * z
+     * a
+     */
+
+This implementation is really efficient as the underlying data structure of SplPrioritiyQueue is a Heap, which allows insertions and extractions in O(log2(N)).
