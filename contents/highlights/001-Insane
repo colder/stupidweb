@@ -1,4 +1,4 @@
-Insane
+## Insane
 
 I'm currently working on a scala compiler plugin that performs interprocedural, compositional effect and pointer analysis on arbitrary scala programs!
 
