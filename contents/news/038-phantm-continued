@@ -3,8 +3,6 @@ PHANTM Continued
 
 Seven months ago, I mentioned _PHANTM_, a tool that statically analyzes PHP code in order to detect and report type mismatch. I've actively continued working on it since then, mainly as a research project for _EPFL_ but also as a fun way to occupy my free time.
 
-test
-
 ### Why check types? This is PHP after all!
 As you may have read recently on the internals mailing list, types are basically being accused of treason against the spirit of PHP. Gosh!
 Some of the original minds behind PHP argued that strictly checking for types wouldn't have its place in the PHP-boat, or even that it would sink it. 
@@ -39,4 +37,4 @@ Interested in seeing some of its features in action? Check out the online demo h
 
 Comments? Contributions? Problems? I'd be happy to hear about them!
 
-
+asd2
