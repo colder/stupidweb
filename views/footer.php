@@ -27,8 +27,10 @@
                             },
                             dataType: "json",
                             success : function (data) {
+                                var path = $("#dialog-edit").attr("path");
+                                $(".markdown[path=\""+path+"\"]").html(data.content);
                                 $("#dialog-edit").dialog("close");
-                                window.location.reload();
+                                
                             }
                         });
                     },

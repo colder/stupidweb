@@ -8,10 +8,10 @@
                 $text  = trim(implode("", array_slice($_lines, 2)));
 
                 echo '
-        <div class="markdown" path="highlights/'.basename($file).'">
-        <h2>'.$title.'</h2>';
+        <div class="markdown" path="highlights/'.basename($file).'">';
 
-                echo Markdown($text);
+                MarkDownRenderer::getFromPath('highlights/'.basename($file))->render();
+
                 echo '
         </div>';
             }
