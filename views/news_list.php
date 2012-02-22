@@ -21,7 +21,7 @@ foreach ($selected_news as $file) {
     }
     $first = false;
     echo '
-<div class="news-item">
+<div class="news-item markdown" path="news/'.basename($file).'">
     <div class="title">
         <h2><a href="/news/'.$date.'/'.$id.'/'.$title_formatted.'">'.$title.'</a></h2>
         <div class="date">'.date('D, j F Y', strtotime($date)).'</div>

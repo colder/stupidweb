@@ -13,7 +13,7 @@ if (!empty($news)) {
 <div class="header-box-right">
     <a href="/news/">Back to list</a>
 </div>
-<div>
+<div class="markdown" path="news/'.basename($news[0]).'">
     <div class="news-item">
         <div class="title">
             <h2>'.$title.'</h2>
