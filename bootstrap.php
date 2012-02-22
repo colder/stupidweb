@@ -1,15 +1,19 @@
 <?php
 session_start();
 
+define('__ROOT__', __DIR__);
+
+if (file_exists(__ROOT__.'/.config.php')) {
+    require __ROOT__.'/.config.php';
+}
+
 function isAdmin() {
     return !empty($_SESSION['isAdmin']);
 }
 
-if (isset($_GET['magic42'])) {
-    $_SESSION['isAdmin'] = (int)$_GET['magic42'];
+if (isset($_GET[$_admin_key])) {
+    $_SESSION['isAdmin'] = (int)$_GET[$_admin_key];
 }
-
-define('__ROOT__', __DIR__);
 
 require __ROOT__.'/libraries/markdown.php';
 require __ROOT__.'/libraries/class.MarkDownRenderer.php';

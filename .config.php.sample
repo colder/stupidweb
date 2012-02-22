@@ -1,0 +1,5 @@
+<?php
+
+// Copy this file to .config.php, set this key to allow admin login
+
+$_admin_key = "";
