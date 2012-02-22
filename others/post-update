@@ -1,0 +1,7 @@
+#!/bin/sh
+#
+# Simple hook to allow for automated publishing when pushing
+
+umask 022
+cd /home/wwwrun/croustillant.ch/www/;
+env -i git pull origin master
