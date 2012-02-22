@@ -10,7 +10,7 @@
        <p>ekneuss@gmail.com</p>
 
        <h3>IRC</h3>
-       <p>ekneuss (Freenode, QuakeNet, EFnet)</p>
+       <p>ekneuss<br />(Freenode, QuakeNet, EFnet)</p>
 
        <h3>Twitter</h3>
        <p><a href="http://twitter.com/ekneuss" target="_blank">@ekneuss</a></p>
