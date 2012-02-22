@@ -1,7 +1,7 @@
 This stupid website
 22.02.2012
 
-I completely rewrote the system that renders this website. For fun I implement
+I completely rewrote the system that renders this website. For fun I implemented
 the following features that strive for simplicity:
 
  *  File based, no database, tracked by git
