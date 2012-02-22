@@ -9,4 +9,4 @@ the following features that strive for simplicity:
  *  Renders markdown content
  *  post-update hook so that I can edit my website locally and publish on push
 
-The system is also publicly available on [https://github.com/colder/stupidweb](github)!
+The system is also publicly available on [github](https://github.com/colder/stupidweb)!
