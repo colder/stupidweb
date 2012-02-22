@@ -11,6 +11,7 @@
         <meta name="author" content="Etienne Kneuss" />
         <link rel="stylesheet" type="text/css" href="/css/coffee.css" />
         <link rel="stylesheet" type="text/css" href="/css/highlight/vs.css" />
+        <link rel="stylesheet" type="text/css" href="/css/smoothness/jquery-ui-1.8.17.custom.css" />
     </head>
     <body>
         <!-- TOP -->

