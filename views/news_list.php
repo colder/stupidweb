@@ -29,3 +29,12 @@ foreach ($selected_news as $file) {
     <div class="text">'.Markdown($text).'</div>
 </div>';
 }
+
+echo '<div class="news-nav">';
+if (($_page+1)*$_perpage < count($news)) {
+    echo '<div class="news-nav-right"><a href="/news/page/'.($_page+2).'">Older Entries</a></div>';
+}
+if ($_page > 0) {
+    echo '<div class="news-nav-left"><a href="/news/page/'.$_page.'">Newer Entries</a></div>';
+}
+echo '</div>';

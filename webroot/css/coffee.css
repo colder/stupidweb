@@ -164,6 +164,22 @@ em {
     margin-bottom: 10px;
 }
 
+.news-nav {
+    margin-top: 40px;
+    border-top: 1px solid #ccc;
+    max-width: 700px;
+    height: 50px;
+}
+
+.news-nav-left {
+    padding: 10px;
+    float: left;
+}
+.news-nav-right {
+    padding: 10px;
+    float: right;
+}
+
 .header-box-right {
     max-width: 700px;
 }
@@ -191,7 +207,7 @@ pre {
     border-left: 2px dotted #7F685A;
     background: #FFF8EF;
     padding: 5px 10px;
-    max-width: 700px;
+    max-width: 670px;
     font-size: 1em;
 }
 
