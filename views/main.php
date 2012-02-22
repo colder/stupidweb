@@ -8,9 +8,12 @@
                 $text  = trim(implode("", array_slice($_lines, 2)));
 
                 echo '
-       <h2>'.$title.'</h2>';
+        <div class="markdown" path="highlights/'.basename($file).'">
+        <h2>'.$title.'</h2>';
 
                 echo Markdown($text);
+                echo '
+        </div>';
             }
         ?>
       </div>
