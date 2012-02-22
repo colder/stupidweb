@@ -11,7 +11,7 @@ function isAdmin() {
     return !empty($_SESSION['isAdmin']);
 }
 
-if (isset($_GET[$_admin_key])) {
+if (isset($_admin_key) && isset($_GET[$_admin_key])) {
     $_SESSION['isAdmin'] = (int)$_GET[$_admin_key];
 }
 
