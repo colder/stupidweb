@@ -1,8 +1,6 @@
 PHANTM Continued
 18.08.2010
 
-test again
-
 Seven months ago, I mentioned _PHANTM_, a tool that statically analyzes PHP code in order to detect and report type mismatch. I've actively continued working on it since then, mainly as a research project for _EPFL_ but also as a fun way to occupy my free time.
 
 ### Why check types? This is PHP after all!
