@@ -33,7 +33,7 @@
 
         <h2>Recent Git Activity</h2>
         <?php
-            $_repos = array("colder/insane");
+            $_repos = array("colder/insane", "colder/stupidweb");
             require __ROOT__.'/views/github.php';
         ?>
       </div>
